@@ -13,11 +13,9 @@ object PacketHandler {
     fun <T : Packet?> handle(session: Session, packet: T): Boolean {
         if (packet == null) return true
 
-//        println(packet)
         return this::class.functions
             .filter { it.name == "handle" }
             .firstOrNull {
-                println(packet!!::class.starProjectedType)
                 it.parameters[2].type == packet!!::class.starProjectedType
             }
             ?.call(this, session, packet) as Boolean? ?: true

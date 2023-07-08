@@ -14,20 +14,20 @@ class PacketDecoder(
     var protocol: Protocol,
     private val server: Boolean = false
 ) : ByteToMessageDecoder() {
-    override fun decode(ctx: ChannelHandlerContext, `in`: ByteBuf, out: MutableList<Any>) {
+    override fun decode(ctx: ChannelHandlerContext, input: ByteBuf, out: MutableList<Any>) {
         try {
-            if (`in` is EmptyByteBuf)
+            if (input is EmptyByteBuf)
                 return
 
             val direction = if (server) protocol.toServer else protocol.toClient
 
-            val id = readVarInt(`in`)
+            val id = readVarInt(input)
 
             val packet = direction.createPacket(id) ?: ProxidedPacket(id)
-            packet.read(`in`)
+            packet.read(input)
 
-            if (`in`.readableBytes() > 0) {
-                throw IllegalStateException("Packet ${packet::class.simpleName} has ${`in`.readableBytes()} bytes left to read")
+            if (input.readableBytes() > 0) {
+                throw IllegalStateException("Packet ${packet::class.simpleName} has ${input.readableBytes()} bytes left to read")
             }
 
             out.add(packet)

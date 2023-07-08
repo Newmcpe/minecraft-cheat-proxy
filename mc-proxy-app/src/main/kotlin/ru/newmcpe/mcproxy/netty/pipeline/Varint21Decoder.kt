@@ -8,37 +8,37 @@ import io.netty.handler.codec.CorruptedFrameException
 import ru.newmcpe.mcproxy.api.util.ByteBufUtil.readVarInt
 
 class Varint21Decoder : ByteToMessageDecoder() {
-    override fun decode(ctx: ChannelHandlerContext, `in`: ByteBuf, out: MutableList<Any?>) {
+    override fun decode(ctx: ChannelHandlerContext, input: ByteBuf, out: MutableList<Any?>) {
         if (!ctx.channel().isActive) {
-            `in`.skipBytes(`in`.readableBytes())
+            input.skipBytes(input.readableBytes())
             return
         }
-        `in`.markReaderIndex()
+        input.markReaderIndex()
         val buf = ByteArray(3)
         for (i in buf.indices) {
-            if (!`in`.isReadable) {
-                `in`.resetReaderIndex()
+            if (!input.isReadable) {
+                input.resetReaderIndex()
                 return
             }
-            buf[i] = `in`.readByte()
+            buf[i] = input.readByte()
             if (buf[i] >= 0) {
                 val length: Int = readVarInt(Unpooled.wrappedBuffer(buf))
                 if (length == 0) {
                     throw CorruptedFrameException("Empty Packet!")
                 }
-                if (`in`.readableBytes() < length) {
-                    `in`.resetReaderIndex()
+                if (input.readableBytes() < length) {
+                    input.resetReaderIndex()
                     return
                 } else {
-                    if (`in`.hasMemoryAddress()) {
-                        out.add(`in`.slice(`in`.readerIndex(), length).retain())
-                        `in`.skipBytes(length)
+                    if (input.hasMemoryAddress()) {
+                        out.add(input.slice(input.readerIndex(), length).retain())
+                        input.skipBytes(length)
                     } else {
                         println("Netty is not using direct IO buffers.")
 
                         // See https://github.com/SpigotMC/BungeeCord/issues/1717
                         val dst = ctx.alloc().directBuffer(length)
-                        `in`.readBytes(dst)
+                        input.readBytes(dst)
                         out.add(dst)
                     }
                     return

@@ -6,7 +6,6 @@ import io.netty.handler.codec.MessageToByteEncoder
 import ru.newmcpe.mcproxy.api.util.ByteBufUtil.writeVarInt
 
 class Varint21Encoder : MessageToByteEncoder<ByteBuf>() {
-    @Throws(Exception::class)
     override fun encode(ctx: ChannelHandlerContext?, msg: ByteBuf, out: ByteBuf) {
         val bodyLen = msg.readableBytes()
         val headerLen = varintSize(bodyLen)
