@@ -1,14 +1,13 @@
 package ru.newmcpe.mcproxy.api.protocol.packet.out
 
 import io.netty.buffer.ByteBuf
-import ru.newmcpe.mcproxy.api.protocol.ConnectionState
-import ru.newmcpe.mcproxy.api.protocol.packet.AbstractPacket
+import ru.newmcpe.mcproxy.api.protocol.packet.Packet
 import ru.newmcpe.mcproxy.api.util.ByteBufUtil.readString
 import ru.newmcpe.mcproxy.api.util.ByteBufUtil.readVarInt
 import ru.newmcpe.mcproxy.api.util.ByteBufUtil.writeString
 import ru.newmcpe.mcproxy.api.util.ByteBufUtil.writeVarInt
 
-class Handshake : AbstractPacket(0x00, ConnectionState.HANDSHAKE) {
+class Handshake : Packet() {
     var protocolVersion: Int = 0
     lateinit var host: String
     private var port: Int = 25565

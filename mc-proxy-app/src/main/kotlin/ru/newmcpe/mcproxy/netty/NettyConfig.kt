@@ -1,5 +1,7 @@
 package ru.newmcpe.mcproxy.netty
 
+import io.netty.channel.ChannelHandler
+import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.EventLoopGroup
 import io.netty.channel.ServerChannel
 import io.netty.channel.epoll.EpollEventLoopGroup
@@ -32,6 +34,18 @@ object NettyConfig {
             thread.uncaughtExceptionHandler = uncaughtExceptionHandler
             thread.isDaemon = true
             thread
+        }
+    }
+
+    class MinecraftChannelHandler : ChannelHandler {
+        override fun handlerRemoved(handler: ChannelHandlerContext) {
+        }
+
+        override fun handlerAdded(handler: ChannelHandlerContext) {
+        }
+
+        override fun exceptionCaught(handler: ChannelHandlerContext, t: Throwable) {
+            handler.close()
         }
     }
 }

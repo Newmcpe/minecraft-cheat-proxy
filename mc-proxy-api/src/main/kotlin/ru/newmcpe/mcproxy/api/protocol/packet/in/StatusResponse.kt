@@ -1,13 +1,12 @@
 package ru.newmcpe.mcproxy.api.protocol.packet.`in`
 
 import io.netty.buffer.ByteBuf
-import ru.newmcpe.mcproxy.api.protocol.ConnectionState
-import ru.newmcpe.mcproxy.api.protocol.packet.AbstractPacket
+import ru.newmcpe.mcproxy.api.protocol.packet.Packet
 import ru.newmcpe.mcproxy.api.util.ByteBufUtil.readString
 import ru.newmcpe.mcproxy.api.util.ByteBufUtil.writeString
 import java.util.*
 
-class StatusResponse : AbstractPacket(0x00, ConnectionState.STATUS) {
+class StatusResponse : Packet() {
     lateinit var json: String
 
     override fun write(buf: ByteBuf) {
@@ -48,16 +47,12 @@ class StatusResponse : AbstractPacket(0x00, ConnectionState.STATUS) {
         )
 
         companion object {
-            val RANDOM = Status(
-                Version("хуй жопа писька пизда", 760),
+            val VALUE = Status(
+                Version("1.0", 761),
                 Players(
-                    500, 100, listOf(
-                        Players.Sample("хуй", UUID.randomUUID()),
-                        Players.Sample("жопа", UUID.randomUUID()),
-                        Players.Sample("пизда", UUID.randomUUID()),
-                    )
+                    500, 333, emptyList()
                 ),
-                Description("дрочить котам онлайн")
+                Description("Новое имбовое прокси, которое невозможно пофиксить")
             )
         }
     }

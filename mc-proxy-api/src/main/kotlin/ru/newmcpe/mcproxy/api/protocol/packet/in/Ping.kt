@@ -1,10 +1,9 @@
 package ru.newmcpe.mcproxy.api.protocol.packet.`in`
 
 import io.netty.buffer.ByteBuf
-import ru.newmcpe.mcproxy.api.protocol.ConnectionState
-import ru.newmcpe.mcproxy.api.protocol.packet.AbstractPacket
+import ru.newmcpe.mcproxy.api.protocol.packet.Packet
 
-class Ping : AbstractPacket(0x01, ConnectionState.STATUS) {
+class Ping : Packet() {
     private var payload: Long = 0
 
     override fun read(buf: ByteBuf) {

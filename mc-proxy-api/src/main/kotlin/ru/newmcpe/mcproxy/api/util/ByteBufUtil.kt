@@ -2,6 +2,8 @@ package ru.newmcpe.mcproxy.api.util
 
 import io.netty.buffer.ByteBuf
 import ru.newmcpe.mcproxy.api.protocol.PlayerPublicKey
+import ru.newmcpe.mcproxy.api.protocol.Property
+import java.util.*
 
 object ByteBufUtil {
     fun writeVarInt(value: Int, buf: ByteBuf) {
@@ -73,5 +75,50 @@ object ByteBufUtil {
         } else {
             buf.writeBoolean(false)
         }
+    }
+
+    fun readUUID(input: ByteBuf): UUID = UUID(input.readLong(), input.readLong())
+
+    fun writeUUID(uuid: UUID, output: ByteBuf) {
+        output.writeLong(uuid.mostSignificantBits)
+        output.writeLong(uuid.leastSignificantBits)
+    }
+
+    fun writeProperties(properties: Collection<Property>, buf: ByteBuf) {
+        if (properties.isEmpty()) {
+            writeVarInt(0, buf)
+            return
+        }
+        writeVarInt(properties.size, buf)
+        properties.forEach { prop ->
+            writeString(prop.name, buf)
+            writeString(prop.value, buf)
+            if (prop.signature != null) {
+                buf.writeBoolean(true)
+                writeString(prop.signature, buf)
+            } else {
+                buf.writeBoolean(false)
+            }
+        }
+    }
+
+    fun readProperties(buf: ByteBuf): Collection<Property> {
+        val properties = arrayOfNulls<Property>(readVarInt(buf))
+        for (j in properties.indices) {
+            val name = readString(buf)
+            val value = readString(buf)
+            if (buf.readBoolean()) {
+                properties[j] = Property(name, value, readString(buf))
+            } else {
+                properties[j] = Property(name, value)
+            }
+        }
+        return properties.filterNotNull()
+    }
+
+    fun toByteArray(wrapped: ByteBuf): ByteArray {
+        val bytes = ByteArray(wrapped.readableBytes())
+        wrapped.readBytes(bytes)
+        return bytes
     }
 }

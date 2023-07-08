@@ -1,17 +1,16 @@
 package ru.newmcpe.mcproxy
 
 import kotlinx.coroutines.runBlocking
-import ru.newmcpe.mcproxy.server.MinecraftServer
+import ru.newmcpe.mcproxy.handling.ProxyServer
 
-object MCProxy {
-    lateinit var server: MinecraftServer
+object Bootstrap {
+    lateinit var server: ProxyServer
 
     @JvmStatic
     fun main(args: Array<String>) {
-        //System.setOut to log4j2 logger
 
         runBlocking {
-            MinecraftServer(25565)
+            ProxyServer(25565)
                 .also { server = it }
                 .also {
                     it

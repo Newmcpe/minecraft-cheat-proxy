@@ -1,14 +1,13 @@
 package ru.newmcpe.mcproxy.api.protocol.packet.`in`
 
 import io.netty.buffer.ByteBuf
-import ru.newmcpe.mcproxy.api.protocol.ConnectionState
-import ru.newmcpe.mcproxy.api.protocol.packet.AbstractPacket
+import ru.newmcpe.mcproxy.api.protocol.packet.Packet
 import ru.newmcpe.mcproxy.api.util.ByteBufUtil.readArray
 import ru.newmcpe.mcproxy.api.util.ByteBufUtil.readString
 import ru.newmcpe.mcproxy.api.util.ByteBufUtil.writeArray
 import ru.newmcpe.mcproxy.api.util.ByteBufUtil.writeString
 
-class EncryptionRequest : AbstractPacket(0x01, ConnectionState.LOGIN) {
+class EncryptionRequest : Packet() {
     lateinit var serverId: String
     lateinit var publicKey: ByteArray
     lateinit var verifyToken: ByteArray

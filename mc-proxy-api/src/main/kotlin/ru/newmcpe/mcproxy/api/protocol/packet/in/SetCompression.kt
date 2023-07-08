@@ -1,13 +1,9 @@
 package ru.newmcpe.mcproxy.api.protocol.packet.`in`
 
 import io.netty.buffer.ByteBuf
-import ru.newmcpe.mcproxy.api.protocol.ConnectionState
-import ru.newmcpe.mcproxy.api.protocol.packet.AbstractPacket
+import ru.newmcpe.mcproxy.api.protocol.packet.Packet
 
-class SetCompression : AbstractPacket(
-    0x03,
-    ConnectionState.LOGIN
-) {
+class SetCompression : Packet() {
     var threshold: Int = 0
 
     override fun read(buf: ByteBuf) {
